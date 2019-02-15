@@ -7,9 +7,17 @@ class Game{//it will get inputs and outputts
 private:
     int whiteScore;
     int blackScore;
+    Player currentPlayer;
+    bool surrender;
+    Board board;
+    IOstream io;
+    movePosition makeIO();
+    void switchPlayer();
+    void updateScores();
 public:
     Game();
-    Player getWinnner();
+    Player getWinner();
+    void start();
 };
 
 #endif 

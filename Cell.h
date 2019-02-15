@@ -1,7 +1,7 @@
 using namespace std;
-enum State {WHITE, BLACK, NONE}; //if black checker=0, white checker=1, no checkers =2
 #ifndef Cell_h
 #define Cell_h
+enum State {WHITE, BLACK, WHITEKING, BLACKKING, NONE}; //if black checker=0, white checker=1, no checkers =2
 class Cell{
 private:
     State state;

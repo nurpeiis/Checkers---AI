@@ -22,6 +22,7 @@ void IOstream::DrawBoard(unordered_map<position, Cell> &board){
             cout<< getSymbol(state)<< "|";
         }
         cout<<endl;
+        cout<<endl;
     }
 }
 string IOstream::getSymbol(State state){
@@ -31,4 +32,8 @@ string IOstream::getSymbol(State state){
         return "b";
     else if (state == WHITE)
         return "w";
+    else if (state == BLACKKING)
+        return "B";
+    else if (state == WHITEKING)
+        return "W";
 }

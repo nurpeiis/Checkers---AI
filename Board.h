@@ -1,13 +1,12 @@
 #include "Cell.h"
 #include <unordered_map>
-#include <vector>
 using namespace std;
-using position = pair<int, int>; //this is not to always write, x,y coordinates
-enum MoveType {USUAL, COMBAT, PROHIBITED}; //if black checker=0, white checker=1, no checkers =2
-enum Player {BLACK, WHITE}; 
-const int BOARDSIZE=8;
 #ifndef Board_h
 #define Board_h
+using position = pair<int, int>; //this is not to always write, x,y coordinates
+enum MoveType {USUAL, COMBAT, PROHIBITED}; //if black checker=0, white checker=1, no checkers =2
+enum Player {BLACK, WHITE, NONE}; 
+const int BOARDSIZE=8;
 class Board{
 private:
     unordered_map<position, Cell> board; 

@@ -2,10 +2,10 @@
 #include <string>
 #include "Board.h"
 using namespace std;
-using movePosition = pair<pair<int,int>, pair<int, int>>;//move from position A to position B
-const int BOARDSIZE=8;
 #ifndef IOstream_h
 #define IOstream_h
+using movePosition = pair<pair<int,int>, pair<int, int>>;//move from position A to position B
+const int BOARDSIZE=8;
 class IOstream{
 public:
     IOstream();
