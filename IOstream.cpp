@@ -1,20 +1,23 @@
 #include "IOstream.h"
 using namespace std;
+IOstream::IOstream(){
+
+}
 const movePosition & IOstream::getMove(){
-    movePosition position;
+    movePosition positionn;
     int p1, p2;
     cin >> p1;
     cin >> p2;
     //start position
-    position.first.first = p1/10;
-    position.first.second = p1 - 10*position.first.first;
+    positionn.first.first = p1/10;
+    positionn.first.second = p1 - 10*positionn.first.first;
     //end position
-    position.second.first = p2/10;
-    position.second.second = p2 - 10*position.second.first;
-    return position;
+    positionn.second.first = p2/10;
+    positionn.second.second = p2 - 10*positionn.second.first;
+    return positionn;
 }
 
-void IOstream::DrawBoard(unordered_map<position, Cell> &board){
+void IOstream::DrawBoard(Unordered_map &board){
     for (int i = 0; i<BOARDSIZE; i++){
         cout<<"|";
         for (int j = 0; j<BOARDSIZE; j++){
@@ -22,8 +25,8 @@ void IOstream::DrawBoard(unordered_map<position, Cell> &board){
             cout<< getSymbol(state)<< "|";
         }
         cout<<endl;
-        cout<<endl;
     }
+    cout<<endl;
 }
 string IOstream::getSymbol(State state){
     if (state == NONE)

@@ -5,29 +5,29 @@ Game::Game(){
     whiteScore=0;
     blackScore=0;
     surrender=false;
-    currentPlayer=Player::NONE;
+    currentPlayer=Player::NONEE;
 }
 
 Player Game::getWinner(){
-    Player winner=Player::NONE;
+    Player winner=Player::NONEE;
     if(surrender){
-        if(currentPlayer==Player::WHITE)
-            winner = Player::BLACK;
-        else if(currentPlayer==Player::BLACK)
-            winner = Player::WHITE;
+        if(currentPlayer==Player::WHITEE)
+            winner = Player::BLACKK;
+        else if(currentPlayer==Player::BLACKK)
+            winner = Player::WHITEE;
     }
     else{
         if (whiteScore == 12)
-            winner = Player::WHITE;
+            winner = Player::WHITEE;
         else if (blackScore == 12)
-            winner = Player::BLACK;
+            winner = Player::BLACKK;
     }
     return winner;
 }
 void Game::start(){
     board.setBoard();
     //game loop
-    while(getWinner() == Player::NONE){ 
+    while(getWinner() == Player::NONEE){ 
        
         MoveType moveOutcome(MoveType::PROHIBITED);
         while(moveOutcome==MoveType::PROHIBITED){
@@ -44,22 +44,21 @@ void Game::start(){
     }
 }
 movePosition Game::makeIO(){
-    system("cls"); //clean console
-    unordered_map<position, Cell> board = this->board.getBoard();
+    Unordered_map board = this->board.getBoard();
     io.DrawBoard(board);
    //get move
     auto move = io.getMove();
     return move;
 }
 void Game::switchPlayer(){
-    if(currentPlayer==Player::WHITE)
-        currentPlayer = Player::BLACK;
+    if(currentPlayer==Player::WHITEE)
+        currentPlayer = Player::BLACKK;
     else
-        currentPlayer = Player::WHITE;
+        currentPlayer = Player::WHITEE;
     
 }
 void Game::updateScores(){
-    if (currentPlayer == Player::WHITE)
+    if (currentPlayer == Player::WHITEE)
         blackScore++;
     else
         whiteScore++;

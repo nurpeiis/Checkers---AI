@@ -27,9 +27,9 @@ void Board::setBoard(){
             Cell cell;
             if((i==0 || i==2) && j%2==0)
                 cell.setState(State::BLACK);
-            else if(i==1  && (j+1%2)==0)
+            else if(i==1  && j%2==1)
                 cell.setState(State::BLACK);
-            else if((i==5||i==7)  && (j+1%2)==0)
+            else if((i==5||i==7)  && j%2==1)
                 cell.setState(State::WHITE);
             else if(i==6&& j%2==0)
                 cell.setState(State::WHITE);
@@ -48,7 +48,7 @@ MoveType Board::checkMove(position start, position end, Player player){
         int xDiff = abs(start.second - end.second); //you can move either to left or right- doesnt really matter
         int yDiff = end.first - start.first;
         MoveType move=PROHIBITED;
-        if(board.at(end).getState==NONE){
+        if(board.at(end).getState() == NONE){
             position middlePos((start.first+end.first)/2, (start.second+end.second)/2);
             State middleState = board.at(middlePos).getState();
             State startState = board.at(start).getState();
@@ -56,7 +56,7 @@ MoveType Board::checkMove(position start, position end, Player player){
                 if(startState!=middleState && middleState!=NONE)
                     move = COMBAT;
             }    
-            else if((xDiff==1 && yDiff==1 && player==Player::BLACK) || (xDiff==1 && yDiff==-1 && player==Player::WHITE)){
+            else if((xDiff==1 && yDiff==1 && player==Player::BLACKK) || (xDiff==1 && yDiff==-1 && player==Player::WHITEE)){
                 move = USUAL;
             }
         }
@@ -79,6 +79,6 @@ MoveType Board::move(position start, position end, Player player){
     return moveResult;
 }
 
-unordered_map<position, Cell> Board::getBoard(){
+Unordered_map Board::getBoard(){
     return this -> board;
 }

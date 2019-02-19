@@ -1,15 +1,20 @@
 #include "Cell.h"
 #include <unordered_map>
+#include <boost> //for hashing the paired values
 using namespace std;
 #ifndef Board_h
 #define Board_h
 using position = pair<int, int>; //this is not to always write, x,y coordinates
 enum MoveType {USUAL, COMBAT, PROHIBITED}; //if black checker=0, white checker=1, no checkers =2
-enum Player {BLACK, WHITE, NONE}; 
+enum Player {BLACKK, WHITEE, NONEE}; 
 const int BOARDSIZE=8;
+
+
+using Unordered_map = std::unordered_map<position, Cell, boost::hash<position>>;
+
 class Board{
 private:
-    unordered_map<position, Cell> board; 
+    Unordered_map board; 
     int noWhite;
     int noBlack;//number of black cells
     MoveType checkMove(position start, position end, Player player); // it checks if the move is correct, it does not need to be pubblic, as is used by the program whenver user makes move
@@ -19,7 +24,7 @@ public:
     void setBoard(); //call this function after every move is maade
     MoveType move(position start, position end, Player player);
     void checkWin();  //Checks if one of the player won
-    unordered_map<position, Cell> getBoard();
+    Unordered_map getBoard();
 };
 
 #endif 
