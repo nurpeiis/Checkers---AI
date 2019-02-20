@@ -5,7 +5,7 @@ Game::Game(){
     whiteScore=0;
     blackScore=0;
     surrender=false;
-    currentPlayer=Player::NONEE;
+    currentPlayer=Player::WHITEE;
 }
 
 Player Game::getWinner(){
@@ -24,17 +24,19 @@ Player Game::getWinner(){
     }
     return winner;
 }
+
 void Game::start(){
-    board.setBoard();
+    this->board.setBoard();
     //game loop
     while(getWinner() == Player::NONEE){ 
-       
+
         MoveType moveOutcome(MoveType::PROHIBITED);
         while(moveOutcome==MoveType::PROHIBITED){
             movePosition move = makeIO();
-            this->board.move(move.first, move.second, this->currentPlayer);
+            moveOutcome = this->board.move(move.first, move.second, this->currentPlayer);
         }
         if (moveOutcome==MoveType::USUAL){
+            cout<<"Usual\n";
             switchPlayer();
         }
         else if (moveOutcome==MoveType::COMBAT){
@@ -44,6 +46,7 @@ void Game::start(){
     }
 }
 movePosition Game::makeIO(){
+    system("cls");
     Unordered_map board = this->board.getBoard();
     io.DrawBoard(board);
    //get move

@@ -2,23 +2,7 @@
 #include <iostream>
 using namespace std;
 Board::Board(){
-    for (int i =0; i<8; i++){
-        for (int j=0; j<8; j++){
-            position pos=position(i,j);
-            Cell cell;
-            if((i==0 || i==2) && j%2==0)
-                cell.setState(State::BLACK);
-            else if(i==1  && (j+1%2)==0)
-                cell.setState(State::BLACK);
-            else if((i==5||i==7)  && (j+1%2)==0)
-                cell.setState(State::WHITE);
-            else if(i==6&& j%2==0)
-                cell.setState(State::WHITE);
-            else
-                cell.setState(State::NONE);
-            board.insert({pos, cell});
-        }
-    }
+
 }
 void Board::setBoard(){
     for (int i =0; i<BOARDSIZE; i++){
@@ -27,11 +11,11 @@ void Board::setBoard(){
             Cell cell;
             if((i==0 || i==2) && j%2==0)
                 cell.setState(State::BLACK);
-            else if(i==1  && j%2==1)
-                cell.setState(State::BLACK);
-            else if((i==5||i==7)  && j%2==1)
+            else if(i==1  && j%2!=0)
+               cell.setState(State::BLACK);
+            else if((i==5||i==7)  && j%2!=0)
                 cell.setState(State::WHITE);
-            else if(i==6&& j%2==0)
+            else if(i==6 && j%2==0)
                 cell.setState(State::WHITE);
             else
                 cell.setState(State::NONE);
@@ -56,7 +40,7 @@ MoveType Board::checkMove(position start, position end, Player player){
                 if(startState!=middleState && middleState!=NONE)
                     move = COMBAT;
             }    
-            else if((xDiff==1 && yDiff==1 && player==Player::BLACKK) || (xDiff==1 && yDiff==-1 && player==Player::WHITEE)){
+            else if((xDiff==1 && yDiff==-1 && player==Player::BLACKK) || (xDiff==1 && yDiff==1 && player==Player::WHITEE)){
                 move = USUAL;
             }
         }

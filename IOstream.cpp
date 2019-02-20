@@ -3,7 +3,7 @@ using namespace std;
 IOstream::IOstream(){
 
 }
-const movePosition & IOstream::getMove(){
+movePosition IOstream::getMove(){
     movePosition positionn;
     int p1, p2;
     cin >> p1;
@@ -14,6 +14,7 @@ const movePosition & IOstream::getMove(){
     //end position
     positionn.second.first = p2/10;
     positionn.second.second = p2 - 10*positionn.second.first;
+    cout<<positionn.first.first;
     return positionn;
 }
 

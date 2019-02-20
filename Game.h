@@ -12,6 +12,7 @@ private:
     Board board;
     IOstream io;
     movePosition makeIO();
+    Player getPlayer();
     void switchPlayer();
     void updateScores();
 public:
