@@ -14,7 +14,6 @@ movePosition IOstream::getMove(){
     //end position
     positionn.second.first = p2/10;
     positionn.second.second = p2 - 10*positionn.second.first;
-    cout<<positionn.first.first;
     return positionn;
 }
 

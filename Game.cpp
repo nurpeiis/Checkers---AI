@@ -36,7 +36,6 @@ void Game::start(){
             moveOutcome = this->board.move(move.first, move.second, this->currentPlayer);
         }
         if (moveOutcome==MoveType::USUAL){
-            cout<<"Usual\n";
             switchPlayer();
         }
         else if (moveOutcome==MoveType::COMBAT){
@@ -46,7 +45,6 @@ void Game::start(){
     }
 }
 movePosition Game::makeIO(){
-    system("cls");
     Unordered_map board = this->board.getBoard();
     io.DrawBoard(board);
    //get move
