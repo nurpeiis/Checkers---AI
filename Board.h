@@ -25,6 +25,7 @@ private:
     int noBlack;//number of black cells
     MoveType checkMove(position start, position end, Player player); // it checks if the move is correct, it does not need to be pubblic, as is used by the program whenver user makes move
     //in the direction of black means it is moving downwards=  
+    bool CheckIfValidJump(position start, position end);
 public:
     Board();//initialize the board where first three and last three are whit and black respectively
     void setBoard(); //call this function after every move is maade
