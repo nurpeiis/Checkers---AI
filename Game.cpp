@@ -27,15 +27,12 @@ Player Game::getWinner(){
 }
 
 void Game::start(){
-    cout<<"hellog";
     this->board.setBoard();
     //game loop
-    cout<<"hello";
     while(getWinner() == Player::NONEE){ 
 
         MoveType moveOutcome(MoveType::PROHIBITED);
         MiniMax minimaxx;
-        cout<<"hello";
         cout<<"Game thingi: " <<minimaxx.checkEnd(this->board.getBoard())<<endl;
 
         while(moveOutcome==MoveType::PROHIBITED){

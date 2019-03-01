@@ -7,10 +7,10 @@ Player MiniMax::checkEnd(Unordered_map board){
     bool blackTie = true;
     bool whiteTie = true;
     for (int i = 0; i < BOARDSIZE; i++){
-        cout<<"hello";
+        //cout<<"hello";
         if(i == 0 || i == 2 || i == 4 || i == 6){
-            cout<<"hello";
-            for (int j = 0; j < BOARDSIZE; j+2){
+            //cout<<"hello";
+            for (int j = 0; j < BOARDSIZE; j = j+2){
                 if (board.at({i,j}).getState() == State::BLACK){
                     noBlack++;
                 }
@@ -23,10 +23,10 @@ Player MiniMax::checkEnd(Unordered_map board){
             }
         }
         else{
-            for (int j = 1; j < BOARDSIZE; j+2){
+            for (int j = 1; j < BOARDSIZE; j = j+2){
                 if (board.at({i,j}).getState() == State::BLACK){
                     noBlack++;
-                    cout<<"hello";
+                    //cout<<"hello";
                     if (i != 7 && blackTie){
                         blackTie = false;
                     }

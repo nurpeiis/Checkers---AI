@@ -181,12 +181,10 @@ MoveType Board::move(position start, position end, Player player)
                 board.at(start).setState(NONE);
 
             }
-            else
-            {
+            else{
                 board.at(end).setState(BLACKKING);
                 board.at(middlePos).setState(NONE);
                 board.at(start).setState(NONE);
-
             }
         cout << "Congrats! You ate the other player\n";
     }
