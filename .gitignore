@@ -1,0 +1,6 @@
+a.out
+Board.o
+Cell.o
+Game.o
+IOstream.o 
+main.o 

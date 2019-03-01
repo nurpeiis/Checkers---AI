@@ -1,6 +1,7 @@
 #include "Game.h"
-#include <stdlib.h>
+
 using namespace std;
+
 Game::Game(){
     whiteScore=0;
     blackScore=0;
@@ -26,11 +27,17 @@ Player Game::getWinner(){
 }
 
 void Game::start(){
+    cout<<"hellog";
     this->board.setBoard();
     //game loop
+    cout<<"hello";
     while(getWinner() == Player::NONEE){ 
 
         MoveType moveOutcome(MoveType::PROHIBITED);
+        MiniMax minimaxx;
+        cout<<"hello";
+        cout<<"Game thingi: " <<minimaxx.checkEnd(this->board.getBoard())<<endl;
+
         while(moveOutcome==MoveType::PROHIBITED){
             movePosition move = makeIO();
             moveOutcome = this->board.move(move.first, move.second, this->currentPlayer);
@@ -42,6 +49,7 @@ void Game::start(){
             updateScores();
             switchPlayer();
         }
+
     }
 }
 movePosition Game::makeIO(){

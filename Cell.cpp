@@ -1,5 +1,4 @@
 #include "Cell.h"
-#include <iostream>
 using namespace std;
 Cell::Cell(){
     this->state= NONE;
