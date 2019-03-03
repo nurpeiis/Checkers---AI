@@ -1,6 +1,7 @@
 #include "MiniMax.h"
 #include "iostream"
 #include <vector>
+#include <cmath>
 using namespace std;
 
 Player MiniMax::checkEnd(Unordered_map board){
@@ -356,4 +357,90 @@ vector<Unordered_map> MiniMax::possibleMoves(Unordered_map board, Player player)
         }
     }
     return possibleMoves;
+}
+
+string MiniMax::getBoardstate(Unordered_map board, Player player){
+    //0 - none, 1 - black , 2 - white
+    //need to look half of the cells
+    string state = "";
+    for (int i = 0; i < BOARDSIZE; i++){
+
+        if(i%2 == 0){
+            for (int j = 0; j < BOARDSIZE; j = j+2){
+                if (board.at({i,j}).getState() == State::NONE){
+                    state.push_back('0');
+                }
+                if (board.at({i,j}).getState() == State::BLACK){
+                    state.push_back('1');
+                }
+                else if (board.at({i,j}).getState() == State::WHITE){
+                    state.push_back('2');
+                } 
+            }
+        }
+
+        else{
+            for (int j = 1; j < BOARDSIZE; j = j+2){
+                if (board.at({i,j}).getState() == State::NONE){
+                    state.push_back('0');
+                }
+                if (board.at({i,j}).getState() == State::BLACK){
+                    state.push_back('1');
+                }
+                else if (board.at({i,j}).getState() == State::WHITE){
+                    state.push_back('2');
+                } 
+            }
+        }
+
+    }
+    //last bit is as follow: if the player is white = 2, black =1
+    if(player == Player::BLACKK){
+        state.push_back('1');
+    }
+    else if(player == Player::WHITEE){
+        state.push_back('2');
+    }
+    return state;
+}
+
+long long MiniMax::hashFunction(string base3){
+    long long key = 0;
+    int base = 3;
+    int counter = 0;
+    for (char & c: base3){
+        key = key + pow(base, counter)*(double)c;
+        counter++;
+    }
+
+    return key;
+}
+
+int MiniMax::assignPoints (string boardState){
+    int points = 0;
+    for (char & c: boardState.substr(0, boardState.length()-1) ){//do not go to last char as it is the player type
+        if (c == '2')
+            points--;
+        else if (c == '1')
+            points++;
+    }
+    return points;
+}
+
+void MiniMax::populateHashTable(Unordered_map board, Player player){
+    string state = getBoardstate(board, player);
+    long long key = hashFunction(state);
+    if (this -> hashTable.find(key) == hashTable.end()){
+        int point = assignPoints(state);
+        hashTable.insert({key, point});
+    }
+}
+
+int MiniMax::findPoint(string boardState){
+    int point = INT_MIN;
+    long long key = hashFunction(boardState);
+    if (this -> hashTable.find(key) != hashTable.end()){
+        point = hashTable.at(key);
+    }
+    return point;
 }

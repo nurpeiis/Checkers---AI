@@ -1,9 +1,6 @@
 #include "Board.h"
 #include <iostream>
 using namespace std;
-Board::Board(){
-
-}
 void Board::setBoard(){
     for (int i =0; i<BOARDSIZE; i++){
         for (int j=0; j<BOARDSIZE; j++){

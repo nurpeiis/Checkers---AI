@@ -5,3 +5,4 @@ Game.o
 IOstream.o 
 MiniMax.o
 main.o 
+.vscode

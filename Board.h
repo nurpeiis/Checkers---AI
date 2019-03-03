@@ -27,10 +27,8 @@ private:
     //in the direction of black means it is moving downwards=  
     bool CheckIfValidJump(position start, position end);
 public:
-    Board();//initialize the board where first three and last three are whit and black respectively
     void setBoard(); //call this function after every move is maade
     MoveType move(position start, position end, Player player);
-    void checkWin();  //Checks if one of the player won
     Unordered_map getBoard();
 };
 

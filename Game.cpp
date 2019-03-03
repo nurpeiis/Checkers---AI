@@ -28,13 +28,19 @@ Player Game::getWinner(){
 
 void Game::start(){
     this->board.setBoard();
+    MiniMax minimaxx;
     //game loop
     while(getWinner() == Player::NONEE){ 
 
         MoveType moveOutcome(MoveType::PROHIBITED);
-        MiniMax minimaxx;
-        cout<<"Game thingi: " <<minimaxx.checkEnd(this->board.getBoard())<<endl;
-
+        string state = minimaxx.getBoardstate(this->board.getBoard(), currentPlayer);
+        cout<<"Check if end: " <<minimaxx.checkEnd(this->board.getBoard())<<endl;
+        cout<<"Return state: "<< state << endl;
+        cout<<"Return hashed number from base 3 to base 10: "<< minimaxx.hashFunction(state)<< endl;
+        cout<<"Return points: "<< minimaxx.assignPoints(state)<<endl;
+        cout<<"Return points with wrong finding: "<< minimaxx.findPoint(state)<<endl;
+        minimaxx.populateHashTable(this->board.getBoard(), currentPlayer);
+        cout<<"Return points with corrected state: "<<minimaxx.findPoint(state)<<endl;
         while(moveOutcome==MoveType::PROHIBITED){
             movePosition move = makeIO();
             moveOutcome = this->board.move(move.first, move.second, this->currentPlayer);
