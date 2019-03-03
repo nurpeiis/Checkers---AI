@@ -11,6 +11,7 @@ class MiniMax{
 private:
     Player checkEnd(Unordered_map board); 
     //WHITEE - white winner BLACKK - black winner, TIE - no one won = non existant condition, NONE - continue playing no one won
+    vector<Unordered_map> possibleMoves (Unordered_map board, Player player);
     string getBoardstate(Unordered_map board);
     //vector<Unordered_map> possibleMoves(Unordered_map board); 
     long long hashFunction(string base3);
