@@ -116,6 +116,7 @@ double MiniMax::assignPoints (string boardState){
             points++;
     }
     return points;
+    
 }
 
 
@@ -146,21 +147,23 @@ bool MiniMax::valid(int r, int c){
     else
         return false;
 }
-void MiniMax::update(Unordered_map& nextBoard, long long key,  Player player, double& current_point, movePosition & move){
+void MiniMax::update(int depth, Unordered_map& nextBoard, long long key,  Player player, double& current_point, movePosition & move){
     string nextBoardState = getBoardstate(nextBoard, player);
     long long nextKey = hashFunction(nextBoardState);
     if (player == Player::WHITEE){
-        double theoMin = theoreticalMin(nextBoardState);
+        //double theoMin = theoreticalMin(nextBoardState);
+        double theoMin = evaluatePoints (nextBoardState);
         if (current_point <= theoMin)
             return;
-        double points = explore(nextBoard, Player::BLACKK);
+        double points = explore(depth+1, nextBoard, Player::BLACKK);
         current_point = min(current_point, points);
     }
     else if (player == Player::BLACKK){
-        double theoMax = theoreticalMax(nextBoardState);
+        //double theoMax = theoreticalMax(nextBoardState);
+        double theoMax = evaluatePoints (nextBoardState);
         if (current_point >= theoMax)
             return;
-        double points = explore(nextBoard, Player::WHITEE);
+        double points = explore(depth+1, nextBoard, Player::WHITEE);
         if(current_point < points){
             current_point =  points;
             moveTable[key] = move;
@@ -188,14 +191,14 @@ double MiniMax::evaluatePoints (string boardState){
     }
     return points;
 }
-double MiniMax::explore(Unordered_map board, Player player){ 
+double MiniMax::explore(int depth, Unordered_map board, Player player){ 
     string boardState = getBoardstate(board, player);
     long long key = hashFunction(boardState);
     if (hashTable.find(key) != hashTable.end())
         return hashTable[key];
-    cout << "RUNNING " << key << endl; 
-    if (checkEnd(board) == Player::NONEE){
-        int current_point = player == Player::WHITEE ? INT_MAX : INT_MIN;
+    //cout << "RUNNING " << key << endl; 
+    if (depth <= DEPTH && checkEnd(board) == Player::NONEE){
+        double current_point = player == Player::WHITEE ? 13.0 : -13.0;
         //cout << "Inside\n";
         //do stuff;
         State sign [3] = {State::BLACK, State::WHITE, State::NONE};
@@ -221,7 +224,7 @@ double MiniMax::explore(Unordered_map board, Player player){
                                 Unordered_map newBoard = board;
                                 Unordered_map nextBoard = nextState(newBoard, move, sign[index]);
                                 //cout<< "A " <<move.first.first << move.first.second << " "<< move.second.first << move.second.second<<endl;
-                                update(nextBoard, key, player, current_point, move);
+                                update(depth, nextBoard, key, player, current_point, move);
                             }
                         }
                     }
@@ -241,7 +244,7 @@ double MiniMax::explore(Unordered_map board, Player player){
                                 newBoard[{midR, midC}] = State::NONE;         
                                 Unordered_map nextBoard = nextState(newBoard, move, sign[index]);
                                 //cout<< "B " <<move.first.first << move.first.second << " "<< move.second.first << move.second.second<<endl;
-                                update(nextBoard, key, player, current_point, move);
+                                update(depth, nextBoard, key, player, current_point, move);
                             }
                         }
                     }
@@ -252,7 +255,7 @@ double MiniMax::explore(Unordered_map board, Player player){
         return current_point;
     }
     else{
-        int points = assignPoints(boardState);
+        double points = evaluatePoints(boardState);
         hashTable[key] = points;
         return points;
     } 

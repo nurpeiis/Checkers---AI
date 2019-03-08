@@ -23,9 +23,7 @@ using Unordered_map = std::unordered_map<position, Cell, pairhash>;
 class Board{
 private:
     Unordered_map board; 
-    MoveType checkMove(position start, position end, Player player); // it checks if the move is correct, it does not need to be pubblic, as is used by the program whenver user makes move
-    //in the direction of black means it is moving downwards=  
-    bool CheckIfValidJump(position start, position end);
+    MoveType checkMove(position start, position end, Player player); 
 public:
     void setBoard(); //call this function after every move is maade
     MoveType move(position start, position end, Player player);
