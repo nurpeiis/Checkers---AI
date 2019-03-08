@@ -213,6 +213,6 @@ bool Board::CheckIfValidJump(position start, position end)
     }
 }
 
-Unordered_map Board::getBoard(){
+const Unordered_map& Board::getBoard(){
     return this -> board;
 }

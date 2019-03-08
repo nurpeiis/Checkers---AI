@@ -1,5 +1,6 @@
 #include "MiniMax.h"
-#include "iostream"
+#include "IOstream.h"
+#include "Cell.h"
 #include <vector>
 #include <cmath>
 using namespace std;
@@ -7,8 +8,8 @@ using namespace std;
 Player MiniMax::checkEnd(Unordered_map board){
     int noBlack = 0;
     int noWhite = 0;
-    bool blackTie = true;
-    bool whiteTie = true;
+    int lowestBlackRow = -1;
+    int highestWhiteRow = 8;
     for (int i = 0; i < BOARDSIZE; i++){
         //cout<<"hello";
         if(i%2 == 0){
@@ -16,12 +17,11 @@ Player MiniMax::checkEnd(Unordered_map board){
             for (int j = 0; j < BOARDSIZE; j = j+2){
                 if (board.at({i,j}).getState() == State::BLACK){
                     noBlack++;
+                    lowestBlackRow = max(lowestBlackRow, i);
                 }
                 else if (board.at({i,j}).getState() == State::WHITE){
                     noWhite++;
-                    if(i != 0 && whiteTie){
-                        whiteTie = false;
-                    }
+                    highestWhiteRow = min(highestWhiteRow, i);
                 } 
             }
         }
@@ -29,13 +29,11 @@ Player MiniMax::checkEnd(Unordered_map board){
             for (int j = 1; j < BOARDSIZE; j = j+2){
                 if (board.at({i,j}).getState() == State::BLACK){
                     noBlack++;
-                    //cout<<"hello";
-                    if (i != 7 && blackTie){
-                        blackTie = false;
-                    }
+                    lowestBlackRow = max(lowestBlackRow, i);
                 } 
                 else if (board.at({i,j}).getState() == State::WHITE)
                     noWhite++;
+                    highestWhiteRow = min(highestWhiteRow, i);
             }
         }
     }
@@ -43,321 +41,14 @@ Player MiniMax::checkEnd(Unordered_map board){
         return Player::WHITEE;
     else if (noWhite == 0)
         return Player::BLACKK;
-    else if (noBlack>0 && noWhite>0)
-        return Player::NONEE;
-    else if (blackTie || whiteTie)
+    else if (highestWhiteRow - lowestBlackRow > 1)
         return Player::TIE;
+    else 
+        return Player::NONEE;
+
 }
 
-vector<Unordered_map> MiniMax::possibleMoves(Unordered_map board, Player player){
-    vector<Unordered_map> possibleMoves;
-    if (player == Player::BLACKK){
-        for (int i = 0; i < BOARDSIZE; i++){
-            if (i%2 == 0){
-                for (int j = 0; j < BOARDSIZE; j = j + 2){
-                    if (board.at({i,j}).getState() == State::BLACK){
-                        
-                        //Check four diagonals
-                        //Black can move back diagonally iff white is there annd the next one is free
-                        if(i+1 < BOARDSIZE && j+1 < BOARDSIZE){
-                            Unordered_map newBoard = board;
-                            if (board.at({i+1,j+1}).getState() == State::NONE){
-                                newBoard.at({i,j}).setState(State::NONE);
-                                newBoard.at({i+1,j+1}).setState(State::BLACK);
-                            }
 
-                            else if (board.at({i+1,j+1}).getState() == State::WHITE || board.at({i+1,j+1}).getState() == State::WHITEKING){
-                                if(i+2 < BOARDSIZE && j+2 < BOARDSIZE){
-                                    if (board.at({i+2,j+2}).getState() == State::NONE){
-                                        newBoard.at({i,j}).setState(State::NONE);
-                                        newBoard.at({i+1,j+1}).setState(State::NONE);
-                                        newBoard.at({i+2,j+2}).setState(State::BLACK);
-                                    }
-                                }
-                            }
-                            possibleMoves.push_back(newBoard);
-                        }
-
-                        if(i+1 < BOARDSIZE && j-1 > -1){
-                            Unordered_map newBoard = board;
-                            if (board.at({i+1,j-1}).getState() == State::NONE){
-                                newBoard.at({i,j}).setState(State::NONE);
-                                newBoard.at({i+1,j-1}).setState(State::BLACK);
-                            }
-                            else if (board.at({i+1,j-1}).getState() == State::WHITE || board.at({i+1,j-1}).getState() == State::WHITEKING){
-                                if(i+2 < BOARDSIZE && j-2 > -1){
-                                    if (board.at({i+2,j-2}).getState() == State::NONE){
-                                        newBoard.at({i,j}).setState(State::NONE);
-                                        newBoard.at({i+1,j-1}).setState(State::NONE);
-                                        newBoard.at({i+2,j-2}).setState(State::BLACK);
-                                    }
-                                }
-                            }
-                            possibleMoves.push_back(newBoard);
-                        }
-                        //backward eating
-                        if(i-1 > -1 && j+1 < BOARDSIZE){
-                            Unordered_map newBoard = board;
-                            if (board.at({i-1,j+1}).getState() == State::WHITE || board.at({i-1,j-1}).getState() == State::WHITEKING){
-                                if(i-2 > -1 && j+2 < BOARDSIZE){
-                                    if (board.at({i-2,j+2}).getState() == State::NONE){
-                                        newBoard.at({i,j}).setState(State::NONE);
-                                        newBoard.at({i-1,j+1}).setState(State::NONE);
-                                        newBoard.at({i-2,j+2}).setState(State::BLACK);
-                                    }
-                                }
-                            }
-                            possibleMoves.push_back(newBoard);
-                        }
-                        if(i-1 > -1 && j-1 > -1){
-                            Unordered_map newBoard = board;
-                            if (board.at({i-1,j-1}).getState() == State::WHITE || board.at({i-1,j-1}).getState() == State::WHITEKING){
-                                if(i-2 > -1 && j-2 > -1){
-                                    if (board.at({i-2,j-2}).getState() == State::NONE){
-                                        newBoard.at({i,j}).setState(State::NONE);
-                                        newBoard.at({i-1,j-1}).setState(State::NONE);
-                                        newBoard.at({i-2,j-2}).setState(State::BLACK);
-                                    }
-                                }
-                            }
-                            possibleMoves.push_back(newBoard);
-                        }
-
-                    }
-                    /* Future aim, if finish early, do this part
-
-                    else if (board.at({i,j}).getState() == State::BLACKKING){
-
-                    }
-                    else if (board.at({i,j}).getState() == State::WHITEKING){
-
-                    }
-                    */
-                    else if (board.at({i,j}).getState() == State::WHITE){
-                        
-                        //Check four diagonals
-                        //Black can move back diagonally iff white is there annd the next one is free
-                        if(i-1 > -1 && j+1 < BOARDSIZE){
-                            Unordered_map newBoard = board;
-                            if (board.at({i-1,j+1}).getState() == State::NONE){
-                                newBoard.at({i,j}).setState(State::NONE);
-                                newBoard.at({i-1,j+1}).setState(State::WHITE);
-                            }
-
-                            else if (board.at({i-1,j+1}).getState() == State::BLACK|| board.at({i-1,j+1}).getState() == State::BLACKKING){
-                                if(i-2 < -1 && j+2 < BOARDSIZE){
-                                    if (board.at({i+2,j+2}).getState() == State::NONE){
-                                        newBoard.at({i,j}).setState(State::NONE);
-                                        newBoard.at({i-1,j+1}).setState(State::NONE);
-                                        newBoard.at({i-2,j+2}).setState(State::WHITE);
-                                    }
-                                }
-                            }
-                            possibleMoves.push_back(newBoard);
-                        }
-
-                        if(i-1 > -1 && j-1 > -1){
-                            Unordered_map newBoard = board;
-                            if (board.at({i+1,j-1}).getState() == State::NONE){
-                                newBoard.at({i,j}).setState(State::NONE);
-                                newBoard.at({i+1,j-1}).setState(State::WHITE);
-                            }
-                            else if (board.at({i+1,j-1}).getState() == State::BLACK || board.at({i+1,j-1}).getState() == State::BLACKKING){
-                                if(i-2 > -1 && j-2 > -1){
-                                    if (board.at({i-2,j-2}).getState() == State::NONE){
-                                        newBoard.at({i,j}).setState(State::NONE);
-                                        newBoard.at({i-1,j-1}).setState(State::NONE);
-                                        newBoard.at({i-2,j-2}).setState(State::WHITE);
-                                    }
-                                }
-                            }
-                            possibleMoves.push_back(newBoard);
-                        }
-                        //forward eating
-                        if(i+1 < BOARDSIZE && j+1 < BOARDSIZE){
-                            Unordered_map newBoard = board;
-                            if (board.at({i+1,j+1}).getState() == State::BLACK || board.at({i-1,j-1}).getState() == State::BLACKKING){
-                                if(i+2 < BOARDSIZE && j+2 < BOARDSIZE){
-                                    if (board.at({i+2,j+2}).getState() == State::NONE){
-                                        newBoard.at({i,j}).setState(State::NONE);
-                                        newBoard.at({i+1,j+1}).setState(State::NONE);
-                                        newBoard.at({i+2,j+2}).setState(State::WHITE);
-                                    }
-                                }
-                            }
-                            possibleMoves.push_back(newBoard);
-                        }
-                        if(i+1 < BOARDSIZE && j-1 > -1){
-                            Unordered_map newBoard = board;
-                            if (board.at({i-1,j-1}).getState() == State::BLACK || board.at({i-1,j-1}).getState() == State::BLACKKING){
-                                if(i+2 < BOARDSIZE && j-2 > -1){
-                                    if (board.at({i-2,j-2}).getState() == State::NONE){
-                                        newBoard.at({i,j}).setState(State::NONE);
-                                        newBoard.at({i+1,j-1}).setState(State::NONE);
-                                        newBoard.at({i+2,j-2}).setState(State::WHITE);
-                                    }
-                                }
-                            }
-                            possibleMoves.push_back(newBoard);
-                        }
-                    }     
-                }
-            }
-
-            else{
-                for (int j = 1; j < BOARDSIZE; j = j + 2){
-                    if (board.at({i,j}).getState() == State::BLACK){
-                        
-                        //Check four diagonals
-                        //Black can move back diagonally iff white is there annd the next one is free
-                        if(i+1 < BOARDSIZE && j+1 < BOARDSIZE){
-                            Unordered_map newBoard = board;
-                            if (board.at({i+1,j+1}).getState() == State::NONE){
-                                newBoard.at({i,j}).setState(State::NONE);
-                                newBoard.at({i+1,j+1}).setState(State::BLACK);
-                            }
-
-                            else if (board.at({i+1,j+1}).getState() == State::WHITE || board.at({i+1,j+1}).getState() == State::WHITEKING){
-                                if(i+2 < BOARDSIZE && j+2 < BOARDSIZE){
-                                    if (board.at({i+2,j+2}).getState() == State::NONE){
-                                        newBoard.at({i,j}).setState(State::NONE);
-                                        newBoard.at({i+1,j+1}).setState(State::NONE);
-                                        newBoard.at({i+2,j+2}).setState(State::BLACK);
-                                    }
-                                }
-                            }
-                            possibleMoves.push_back(newBoard);
-                        }
-
-                        if(i+1 < BOARDSIZE && j-1 > -1){
-                            Unordered_map newBoard = board;
-                            if (board.at({i+1,j-1}).getState() == State::NONE){
-                                newBoard.at({i,j}).setState(State::NONE);
-                                newBoard.at({i+1,j-1}).setState(State::BLACK);
-                            }
-                            else if (board.at({i+1,j-1}).getState() == State::WHITE || board.at({i+1,j-1}).getState() == State::WHITEKING){
-                                if(i+2 < BOARDSIZE && j-2 > -1){
-                                    if (board.at({i+2,j-2}).getState() == State::NONE){
-                                        newBoard.at({i,j}).setState(State::NONE);
-                                        newBoard.at({i+1,j-1}).setState(State::NONE);
-                                        newBoard.at({i+2,j-2}).setState(State::BLACK);
-                                    }
-                                }
-                            }
-                            possibleMoves.push_back(newBoard);
-                        }
-                        //backward eating
-                        if(i-1 > -1 && j+1 < BOARDSIZE){
-                            Unordered_map newBoard = board;
-                            if (board.at({i-1,j+1}).getState() == State::WHITE || board.at({i-1,j-1}).getState() == State::WHITEKING){
-                                if(i-2 > -1 && j+2 < BOARDSIZE){
-                                    if (board.at({i-2,j+2}).getState() == State::NONE){
-                                        newBoard.at({i,j}).setState(State::NONE);
-                                        newBoard.at({i-1,j+1}).setState(State::NONE);
-                                        newBoard.at({i-2,j+2}).setState(State::BLACK);
-                                    }
-                                }
-                            }
-                            possibleMoves.push_back(newBoard);
-                        }
-                        if(i-1 > -1 && j-1 > -1){
-                            Unordered_map newBoard = board;
-                            if (board.at({i-1,j-1}).getState() == State::WHITE || board.at({i-1,j-1}).getState() == State::WHITEKING){
-                                if(i-2 > -1 && j-2 > -1){
-                                    if (board.at({i-2,j-2}).getState() == State::NONE){
-                                        newBoard.at({i,j}).setState(State::NONE);
-                                        newBoard.at({i-1,j-1}).setState(State::NONE);
-                                        newBoard.at({i-2,j-2}).setState(State::BLACK);
-                                    }
-                                }
-                            }
-                            possibleMoves.push_back(newBoard);
-                        }
-
-                    }
-                    /* Future aim, if finish early, do this part
-
-                    else if (board.at({i,j}).getState() == State::BLACKKING){
-
-                    }
-                    else if (board.at({i,j}).getState() == State::WHITEKING){
-
-                    }
-                    */
-                    else if (board.at({i,j}).getState() == State::WHITE){
-                        
-                        //Check four diagonals
-                        //Black can move back diagonally iff white is there annd the next one is free
-                        if(i-1 > -1 && j+1 < BOARDSIZE){
-                            Unordered_map newBoard = board;
-                            if (board.at({i-1,j+1}).getState() == State::NONE){
-                                newBoard.at({i,j}).setState(State::NONE);
-                                newBoard.at({i-1,j+1}).setState(State::WHITE);
-                            }
-
-                            else if (board.at({i-1,j+1}).getState() == State::BLACK|| board.at({i-1,j+1}).getState() == State::BLACKKING){
-                                if(i-2 < -1 && j+2 < BOARDSIZE){
-                                    if (board.at({i+2,j+2}).getState() == State::NONE){
-                                        newBoard.at({i,j}).setState(State::NONE);
-                                        newBoard.at({i-1,j+1}).setState(State::NONE);
-                                        newBoard.at({i-2,j+2}).setState(State::WHITE);
-                                    }
-                                }
-                            }
-                            possibleMoves.push_back(newBoard);
-                        }
-
-                        if(i-1 > -1 && j-1 > -1){
-                            Unordered_map newBoard = board;
-                            if (board.at({i+1,j-1}).getState() == State::NONE){
-                                newBoard.at({i,j}).setState(State::NONE);
-                                newBoard.at({i+1,j-1}).setState(State::WHITE);
-                            }
-                            else if (board.at({i+1,j-1}).getState() == State::BLACK || board.at({i+1,j-1}).getState() == State::BLACKKING){
-                                if(i-2 > -1 && j-2 > -1){
-                                    if (board.at({i-2,j-2}).getState() == State::NONE){
-                                        newBoard.at({i,j}).setState(State::NONE);
-                                        newBoard.at({i-1,j-1}).setState(State::NONE);
-                                        newBoard.at({i-2,j-2}).setState(State::WHITE);
-                                    }
-                                }
-                            }
-                            possibleMoves.push_back(newBoard);
-                        }
-                        //forward eating
-                        if(i+1 < BOARDSIZE && j+1 < BOARDSIZE){
-                            Unordered_map newBoard = board;
-                            if (board.at({i+1,j+1}).getState() == State::BLACK || board.at({i-1,j-1}).getState() == State::BLACKKING){
-                                if(i+2 < BOARDSIZE && j+2 < BOARDSIZE){
-                                    if (board.at({i+2,j+2}).getState() == State::NONE){
-                                        newBoard.at({i,j}).setState(State::NONE);
-                                        newBoard.at({i+1,j+1}).setState(State::NONE);
-                                        newBoard.at({i+2,j+2}).setState(State::WHITE);
-                                    }
-                                }
-                            }
-                            possibleMoves.push_back(newBoard);
-                        }
-                        if(i+1 < BOARDSIZE && j-1 > -1){
-                            Unordered_map newBoard = board;
-                            if (board.at({i-1,j-1}).getState() == State::BLACK || board.at({i-1,j-1}).getState() == State::BLACKKING){
-                                if(i+2 < BOARDSIZE && j-2 > -1){
-                                    if (board.at({i-2,j-2}).getState() == State::NONE){
-                                        newBoard.at({i,j}).setState(State::NONE);
-                                        newBoard.at({i+1,j-1}).setState(State::NONE);
-                                        newBoard.at({i+2,j-2}).setState(State::WHITE);
-                                    }
-                                }
-                            }
-                            possibleMoves.push_back(newBoard);
-                        }
-                    }     
-                }
-            }
-        }
-    }
-    return possibleMoves;
-}
 
 string MiniMax::getBoardstate(Unordered_map board, Player player){
     //0 - none, 1 - black , 2 - white
@@ -416,8 +107,8 @@ long long MiniMax::hashFunction(string base3){
     return key;
 }
 
-int MiniMax::assignPoints (string boardState){
-    int points = 0;
+double MiniMax::assignPoints (string boardState){
+    double points = 0;
     for (char & c: boardState.substr(0, boardState.length()-1) ){//do not go to last char as it is the player type
         if (c == '2')
             points--;
@@ -427,20 +118,142 @@ int MiniMax::assignPoints (string boardState){
     return points;
 }
 
-void MiniMax::populateHashTable(Unordered_map board, Player player){
-    string state = getBoardstate(board, player);
-    long long key = hashFunction(state);
-    if (this -> hashTable.find(key) == hashTable.end()){
-        int point = assignPoints(state);
-        hashTable.insert({key, point});
+
+double MiniMax::theoreticalMax(string boardState){
+    double points = 0;
+    for (char & c: boardState.substr(0, boardState.length()-1) ){//do not go to last char as it is the player type
+        if (c == '1')
+            points++;
+    }
+    return points;
+}
+double MiniMax::theoreticalMin(string boardState){
+    double points = 0;
+    for (char & c: boardState.substr(0, boardState.length()-1) ){//do not go to last char as it is the player type
+        if (c == '2')
+            points--;
+    }
+    return points;
+}
+Unordered_map MiniMax::nextState (Unordered_map currentBoard, movePosition move, State change){
+    currentBoard[{move.first.first, move.first.second}] = State::NONE;
+    currentBoard[{move.second.first, move.second.second}] = change;
+    return currentBoard;
+}
+bool MiniMax::valid(int r, int c){
+    if(r > -1 && r < BOARDSIZE && c > -1 && c < BOARDSIZE)
+        return true;
+    else
+        return false;
+}
+void MiniMax::update(Unordered_map& nextBoard, long long key,  Player player, double& current_point, movePosition & move){
+    string nextBoardState = getBoardstate(nextBoard, player);
+    long long nextKey = hashFunction(nextBoardState);
+    if (player == Player::WHITEE){
+        double theoMin = theoreticalMin(nextBoardState);
+        if (current_point <= theoMin)
+            return;
+        double points = explore(nextBoard, Player::BLACKK);
+        current_point = min(current_point, points);
+    }
+    else if (player == Player::BLACKK){
+        double theoMax = theoreticalMax(nextBoardState);
+        if (current_point >= theoMax)
+            return;
+        double points = explore(nextBoard, Player::WHITEE);
+        if(current_point < points){
+            current_point =  points;
+            moveTable[key] = move;
+        }
     }
 }
-
-int MiniMax::findPoint(string boardState){
-    int point = INT_MIN;
-    long long key = hashFunction(boardState);
-    if (this -> hashTable.find(key) != hashTable.end()){
-        point = hashTable.at(key);
+double MiniMax::evaluatePoints (string boardState){
+    int noBlack = 0;
+    int noWhite = 0;
+    for (char & c: boardState.substr(0, boardState.length()-1) ){
+        if (c == '1')
+            noBlack++;
+        else if (c == '2')
+            noWhite++;
     }
-    return point;
+    double points = 0;
+    if (noBlack == noWhite){
+        return points;
+    }
+    else if (noBlack > noWhite){
+        points = noBlack - noWhite + (noBlack/12.0);
+    }
+    else {
+        points = -(noWhite - noBlack) - (noWhite/12.0);
+    }
+    return points;
+}
+double MiniMax::explore(Unordered_map board, Player player){ 
+    string boardState = getBoardstate(board, player);
+    long long key = hashFunction(boardState);
+    if (hashTable.find(key) != hashTable.end())
+        return hashTable[key];
+    cout << "RUNNING " << key << endl; 
+    if (checkEnd(board) == Player::NONEE){
+        int current_point = player == Player::WHITEE ? INT_MAX : INT_MIN;
+        //cout << "Inside\n";
+        //do stuff;
+        State sign [3] = {State::BLACK, State::WHITE, State::NONE};
+        int index = player == Player::BLACKK ? 0:1;
+        //define directionalities
+        int dr[2][4] = {{1,1,-1,-1}, {-1,-1,1,1}};
+        int dc[2][4] = {{-1,1,-1,1}, {-1,1,-1,1}};
+        for (int i = 0; i < BOARDSIZE; i++){
+            for (int j = 0; j < BOARDSIZE; j++){
+                if(board.at({i,j}).getState() == sign[index]){
+                    
+                    //usual move = no combat
+                    for (int k = 0; k < 2; k++){
+                        int r = i + dr[index][k];
+                        int c = j + dc[index][k];
+                        if(valid(r,c)){
+                            if(board.at({r,c}).getState() == sign[2]){
+                                movePosition move;
+                                move.first.first = i;
+                                move.first.second = j;
+                                move.second.first = r;
+                                move.second.second = c;
+                                Unordered_map newBoard = board;
+                                Unordered_map nextBoard = nextState(newBoard, move, sign[index]);
+                                //cout<< "A " <<move.first.first << move.first.second << " "<< move.second.first << move.second.second<<endl;
+                                update(nextBoard, key, player, current_point, move);
+                            }
+                        }
+                    }
+                    for (int k = 0; k < 4; k++){
+                        int midR = i + dr[index][k];
+                        int midC = j + dc[index][k];
+                        int lastR = i + 2*dr[index][k];
+                        int lastC = j + 2*dc[index][k];
+                        if(valid(midR, midC) && valid(lastR, lastC)){
+                            if(board.at({midR,midC}).getState() == sign[1-index] && board.at({lastR, lastC}).getState() == sign[2]){
+                                movePosition move;
+                                move.first.first = i;
+                                move.first.second = j;
+                                move.second.first = lastR;
+                                move.second.second = lastC;
+                                Unordered_map newBoard = board;
+                                newBoard[{midR, midC}] = State::NONE;         
+                                Unordered_map nextBoard = nextState(newBoard, move, sign[index]);
+                                //cout<< "B " <<move.first.first << move.first.second << " "<< move.second.first << move.second.second<<endl;
+                                update(nextBoard, key, player, current_point, move);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        hashTable[key] = current_point;
+        return current_point;
+    }
+    else{
+        int points = assignPoints(boardState);
+        hashTable[key] = points;
+        return points;
+    } 
 }

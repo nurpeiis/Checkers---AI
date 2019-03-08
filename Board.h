@@ -29,7 +29,7 @@ private:
 public:
     void setBoard(); //call this function after every move is maade
     MoveType move(position start, position end, Player player);
-    Unordered_map getBoard();
+    const Unordered_map& getBoard();
 };
 
 #endif 

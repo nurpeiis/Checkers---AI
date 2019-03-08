@@ -19,7 +19,7 @@ private:
     void updateScores();
 public:
     Game();
-    Player getWinner();
+    const Player& getWinner();
     void start();
 };
 

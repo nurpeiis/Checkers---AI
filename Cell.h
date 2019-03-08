@@ -8,7 +8,7 @@ private:
 public:
     Cell();
     Cell(State state);
-    State getState();
+    const State& getState();
     void setState(State state);
 };
 

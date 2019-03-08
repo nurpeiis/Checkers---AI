@@ -6,7 +6,7 @@ Cell::Cell(){
 Cell::Cell(State state){
     this->state=state;
 }
-State Cell::getState(){
+const State& Cell::getState(){
     return this->state;
 }
 void Cell::setState(State state){

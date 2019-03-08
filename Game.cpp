@@ -6,10 +6,10 @@ Game::Game(){
     whiteScore=0;
     blackScore=0;
     surrender=false;
-    currentPlayer=Player::WHITEE;
+    currentPlayer=Player::BLACKK;
 }
 
-Player Game::getWinner(){
+const Player& Game::getWinner(){
     Player winner=Player::NONEE;
     if(surrender){
         if(currentPlayer==Player::WHITEE)
@@ -33,17 +33,23 @@ void Game::start(){
     while(getWinner() == Player::NONEE){ 
 
         MoveType moveOutcome(MoveType::PROHIBITED);
-        string state = minimaxx.getBoardstate(this->board.getBoard(), currentPlayer);
-        cout<<"Check if end: " <<minimaxx.checkEnd(this->board.getBoard())<<endl;
-        cout<<"Return state: "<< state << endl;
-        cout<<"Return hashed number from base 3 to base 10: "<< minimaxx.hashFunction(state)<< endl;
-        cout<<"Return points: "<< minimaxx.assignPoints(state)<<endl;
-        cout<<"Return points with wrong finding: "<< minimaxx.findPoint(state)<<endl;
-        minimaxx.populateHashTable(this->board.getBoard(), currentPlayer);
-        cout<<"Return points with corrected state: "<<minimaxx.findPoint(state)<<endl;
-        while(moveOutcome==MoveType::PROHIBITED){
-            movePosition move = makeIO();
+        if (currentPlayer == Player::BLACKK){
+            string boardState = minimaxx.getBoardstate(board.getBoard(), currentPlayer);
+            long long key = minimaxx.hashFunction(boardState);
+            if(minimaxx.moveTable.find(key) == minimaxx.moveTable.end()){
+                cout<<"OK" << endl;
+                minimaxx.explore(board.getBoard(), currentPlayer);
+            }
+            movePosition move = minimaxx.moveTable[key];
+            cout<< move.first.first << move.first.second << " "<< move.second.first << move.second.second<<endl;
             moveOutcome = this->board.move(move.first, move.second, this->currentPlayer);
+            return;
+        } 
+        else{ 
+            while(moveOutcome==MoveType::PROHIBITED){
+                movePosition move = makeIO();
+                moveOutcome = this->board.move(move.first, move.second, this->currentPlayer);
+            }
         }
         if (moveOutcome==MoveType::USUAL){
             switchPlayer();
@@ -52,7 +58,6 @@ void Game::start(){
             updateScores();
             switchPlayer();
         }
-
     }
 }
 movePosition Game::makeIO(){
