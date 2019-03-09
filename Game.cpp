@@ -9,7 +9,7 @@ Game::Game(){
     currentPlayer=Player::BLACKK;
 }
 
-const Player& Game::getWinner(Unordered_map board){
+Player Game::getWinner(Unordered_map board){
     int noBlack = 0;
     int noWhite = 0;
     int lowestBlackRow = -1;

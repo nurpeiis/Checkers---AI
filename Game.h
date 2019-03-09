@@ -19,7 +19,7 @@ private:
     void updateScores();
 public:
     Game();
-    const Player& getWinner(Unordered_map board);
+    Player getWinner(Unordered_map board);
     void start();
 };
 
