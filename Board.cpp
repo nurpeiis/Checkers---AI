@@ -31,6 +31,8 @@ MoveType Board::checkMove(position start, position end, Player player)
             if(board.at({end.first, end.second}).getState() == sign[2]){
                 return MoveType::USUAL;
             }
+            else 
+                return MoveType::PROHIBITED;
         }
         else if (abs(start.first - end.first) == 2 && abs(start.second - end.second) == 2){
             if (board.at({end.first, end.second}).getState() == sign[2]){

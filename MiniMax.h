@@ -10,7 +10,7 @@ class MiniMax{
 private:
     unordered_map<long long, double> hashTable; //stores points for states, so that you do not need to calculate every time 
     unordered_map<long long, movePosition> moveTable;
-    const int DEPTH = 8;
+    const int DEPTH = 9;
     //Points: black = +1, white = -1 
     //String Board State: 0 - none, 1 - black , 2 - white
 public:

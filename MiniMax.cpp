@@ -208,8 +208,7 @@ double MiniMax::explore(int depth, Unordered_map board, Player player){
         int dc[2][4] = {{-1,1,-1,1}, {-1,1,-1,1}};
         for (int i = 0; i < BOARDSIZE; i++){
             for (int j = 0; j < BOARDSIZE; j++){
-                if(board.at({i,j}).getState() == sign[index]){
-                    
+                if(board.at({i,j}).getState() == sign[index]){                   
                     //usual move = no combat
                     for (int k = 0; k < 2; k++){
                         int r = i + dr[index][k];

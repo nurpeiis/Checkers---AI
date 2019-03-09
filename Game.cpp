@@ -82,6 +82,12 @@ void Game::start(){
             switchPlayer();
         }
     }
+    if(getWinner(this->board.getBoard()) == Player::WHITEE){
+        cout<<"You won the smartest player in the world\n";
+    }
+    else if (getWinner(this->board.getBoard()) == Player::BLACKK){
+        cout << "You lost to artificial intelligence. Sad Reacts;(\n";
+    }
 }
 movePosition Game::makeIO(){
     Unordered_map board = this->board.getBoard();
