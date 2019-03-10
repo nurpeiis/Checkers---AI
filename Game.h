@@ -12,7 +12,6 @@ private:
     movePosition makeIO();
     Player getPlayer();
     void switchPlayer();
-    Player getWinner(Unordered_map board);
 public:
     Game();
     void start();

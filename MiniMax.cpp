@@ -194,8 +194,10 @@ double MiniMax::evaluatePoints (string boardState){
 double MiniMax::explore(int depth, Unordered_map board, Player player){ 
     string boardState = getBoardstate(board, player);
     long long key = hashFunction(boardState);
-    if (hashTable.find(key) != hashTable.end())
+    //if (key == 137123399843755760L) cout << "STARTING\n";
+    if (moveTable.find(key) != moveTable.end())
         return hashTable[key];
+    //if (key == 137123399843755760L) cout << "RUNNING\n";
     //cout << "RUNNING " << key << endl; 
     if (depth <= DEPTH && checkEnd(board) == Player::NONEE){
         double current_point = player == Player::WHITEE ? 13.0 : -13.0;
@@ -213,6 +215,7 @@ double MiniMax::explore(int depth, Unordered_map board, Player player){
                     for (int k = 0; k < 2; k++){
                         int r = i + dr[index][k];
                         int c = j + dc[index][k];
+                        //if (key == 137123399843755760L) cout << i << j << ' ' << r << c << endl;
                         if(valid(r,c)){
                             if(board.at({r,c}).getState() == sign[2]){
                                 movePosition move;
@@ -232,6 +235,7 @@ double MiniMax::explore(int depth, Unordered_map board, Player player){
                         int midC = j + dc[index][k];
                         int lastR = i + 2*dr[index][k];
                         int lastC = j + 2*dc[index][k];
+                        //if (key == 137123399843755760L) cout << i << j << ' ' << lastR << lastC << endl;
                         if(valid(midR, midC) && valid(lastR, lastC)){
                             if(board.at({midR,midC}).getState() == sign[1-index] && board.at({lastR, lastC}).getState() == sign[2]){
                                 movePosition move;
