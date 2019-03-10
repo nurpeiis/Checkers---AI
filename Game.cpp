@@ -3,9 +3,6 @@
 using namespace std;
 
 Game::Game(){
-    whiteScore=0;
-    blackScore=0;
-    surrender=false;
     currentPlayer=Player::BLACKK;
 }
 
@@ -51,6 +48,23 @@ Player Game::getWinner(Unordered_map board){
         return Player::NONEE;
 }
 
+movePosition Game::makeIO(){
+    Unordered_map board = this->board.getBoard();
+    IOstream::DrawBoard(board);
+    //io.DrawBoard(board);
+   //get move
+    auto move = IOstream::getMove();
+    return move;
+}
+
+void Game::switchPlayer(){
+    if(currentPlayer==Player::WHITEE)
+        currentPlayer = Player::BLACKK;
+    else
+        currentPlayer = Player::WHITEE;
+    
+}
+
 void Game::start(){
     this->board.setBoard();
     MiniMax minimaxx;
@@ -78,7 +92,6 @@ void Game::start(){
             switchPlayer();
         }
         else if (moveOutcome==MoveType::COMBAT){
-            updateScores();
             switchPlayer();
         }
     }
@@ -92,25 +105,4 @@ void Game::start(){
     {
         cout << "You as smart as the smartest virtual player\n";
     }  
-}
-movePosition Game::makeIO(){
-    Unordered_map board = this->board.getBoard();
-    io.DrawBoard(board);
-   //get move
-    auto move = io.getMove();
-    return move;
-}
-void Game::switchPlayer(){
-    if(currentPlayer==Player::WHITEE)
-        currentPlayer = Player::BLACKK;
-    else
-        currentPlayer = Player::WHITEE;
-    
-}
-void Game::updateScores(){
-    if (currentPlayer == Player::WHITEE)
-        blackScore++;
-    else
-        whiteScore++;
-    
 }

@@ -6,3 +6,4 @@ IOstream.o
 MiniMax.o
 main.o 
 .vscode
+checkers

@@ -7,19 +7,14 @@
 
 class Game{//it will get inputs and outputts
 private:
-    int whiteScore;
-    int blackScore;
     Player currentPlayer;
-    bool surrender;
     Board board;
-    IOstream io;
     movePosition makeIO();
     Player getPlayer();
     void switchPlayer();
-    void updateScores();
+    Player getWinner(Unordered_map board);
 public:
     Game();
-    Player getWinner(Unordered_map board);
     void start();
 };
 
