@@ -18,8 +18,9 @@ movePosition IOstream::getMove(){
 }
 
 void IOstream::DrawBoard(Unordered_map &board){
+    cout<<" |0|1|2|3|4|5|6|7|"<<endl;
     for (int i = 0; i<BOARDSIZE; i++){
-        cout<<"|";
+        cout<<i<<"|";
         for (int j = 0; j<BOARDSIZE; j++){
             State state = board.at(position({i, j})).getState();
             cout<< getSymbol(state)<< "|";

@@ -9,8 +9,6 @@ Game::Game(){
 movePosition Game::makeIO(){
     Unordered_map board = this->board.getBoard();
     IOstream::DrawBoard(board);//Display::DrawBoard(board)
-    //io.DrawBoard(board);
-   //get move
     auto move = IOstream::getMove();
     return move;
 }
@@ -28,7 +26,6 @@ void Game::start(){
     MiniMax minimaxx;
     //game loop
     while(minimaxx.checkEnd(this->board.getBoard(), currentPlayer) == Player::NONEE){ 
-
         MoveType moveOutcome(MoveType::PROHIBITED);
         if (currentPlayer == Player::BLACKK){
             string boardState = minimaxx.getBoardstate(board.getBoard(), currentPlayer);
@@ -38,7 +35,7 @@ void Game::start(){
             }
             movePosition move = minimaxx.moveTable[key];
             //cout << key << endl;
-            cout<< move.first.first << move.first.second << " "<< move.second.first << move.second.second<<endl;
+            //cout<< move.first.first << move.first.second << " "<< move.second.first << move.second.second<<endl;
             //if(move.first.first == 0 && move.first.second == 0 && move.second.second ==0 && move.second.first ==0)
                // return;
             moveOutcome = this->board.move(move.first, move.second, this->currentPlayer);

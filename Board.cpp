@@ -71,7 +71,10 @@ MoveType Board::move(position start, position end, Player player)
         board.at(end).setState(board.at(start).getState());
         board.at(middlePos).setState(NONE);
         board.at(start).setState(NONE);
-        cout << "Congrats! You ate the other player\n";
+        if(player == Player::WHITEE)
+            cout << "Congrats! You ate the other player\n";
+        else if (player == Player::BLACKK)
+            cout << "Unfortunately MMM ate you;(\n";
     }
     else if (moveResult == PROHIBITED)
 
