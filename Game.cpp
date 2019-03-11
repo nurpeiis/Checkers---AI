@@ -8,7 +8,7 @@ Game::Game(){
 
 movePosition Game::makeIO(){
     Unordered_map board = this->board.getBoard();
-    IOstream::DrawBoard(board);
+    IOstream::DrawBoard(board);//Display::DrawBoard(board)
     //io.DrawBoard(board);
    //get move
     auto move = IOstream::getMove();
@@ -27,7 +27,7 @@ void Game::start(){
     this->board.setBoard();
     MiniMax minimaxx;
     //game loop
-    while(minimaxx.checkEnd(this->board.getBoard()) == Player::NONEE){ 
+    while(minimaxx.checkEnd(this->board.getBoard(), currentPlayer) == Player::NONEE){ 
 
         MoveType moveOutcome(MoveType::PROHIBITED);
         if (currentPlayer == Player::BLACKK){
@@ -56,10 +56,10 @@ void Game::start(){
             switchPlayer();
         }
     }
-    if(minimaxx.checkEnd(this->board.getBoard()) == Player::WHITEE){
+    if(minimaxx.checkEnd(this->board.getBoard(), currentPlayer) == Player::WHITEE){
         cout<<"You won the smartest player in the world\n";
     }
-    else if (minimaxx.checkEnd(this->board.getBoard()) == Player::BLACKK){
+    else if (minimaxx.checkEnd(this->board.getBoard(), currentPlayer) == Player::BLACKK){
         cout << "You lost to artificial intelligence. Sad Reacts;(\n";
     }
     else

@@ -18,7 +18,7 @@ public:
     friend class Game;
 
 private:
-    Player checkEnd(Unordered_map board); 
+    Player checkEnd(Unordered_map board, Player player); 
     //WHITEE - white winner BLACKK - black winner, TIE - no one won = non existant condition, NONE - continue playing no one won
     string getBoardstate(Unordered_map board, Player player);
     long long hashFunction(string boardState);

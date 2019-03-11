@@ -5,7 +5,7 @@
 #include <cmath>
 using namespace std;
 
-Player MiniMax::checkEnd(Unordered_map board){
+Player MiniMax::checkEnd(Unordered_map board, Player player){
     int noBlack = 0;
     int noWhite = 0;
     int lowestBlackRow = -1;
@@ -37,7 +37,50 @@ Player MiniMax::checkEnd(Unordered_map board){
             }
         }
     }
-    if (noBlack == 0)
+    int possibleMoves = 0;
+    State sign [3] = {State::BLACK, State::WHITE, State::NONE};
+    int index = player == Player::BLACKK ? 0:1;
+    //define directionalities
+    int dr[2][4] = {{1,1,-1,-1}, {-1,-1,1,1}};
+    int dc[2][4] = {{-1,1,-1,1}, {-1,1,-1,1}};
+    for (int i = 0; i < BOARDSIZE; i++){
+        for (int j = 0; j < BOARDSIZE; j++){
+            if(board.at({i,j}).getState() == sign[index]){                   
+                //usual move = no combat
+                for (int k = 0; k < 2; k++){
+                    int r = i + dr[index][k];
+                    int c = j + dc[index][k];
+                    if(valid(r,c)){
+                        if(board.at({r,c}).getState() == sign[2]){
+                            possibleMoves++;
+                            break;
+                        }
+                    }
+                }
+                for (int k = 0; k < 4; k++){
+                    int midR = i + dr[index][k];
+                    int midC = j + dc[index][k];
+                    int lastR = i + 2*dr[index][k];
+                    int lastC = j + 2*dc[index][k];
+                    if(valid(midR, midC) && valid(lastR, lastC)){
+                        if(board.at({midR,midC}).getState() == sign[1-index] && board.at({lastR, lastC}).getState() == sign[2]){
+                            possibleMoves++;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    if (possibleMoves == 0){
+        if (noBlack > noWhite)
+            return Player::BLACKK;
+        else if (noBlack < noWhite)
+            return Player::WHITEE;
+        else    
+            return Player::TIE;
+    }
+    else if (noBlack == 0)
         return Player::WHITEE;
     else if (noWhite == 0)
         return Player::BLACKK;
@@ -45,7 +88,8 @@ Player MiniMax::checkEnd(Unordered_map board){
         return Player::TIE;
     else 
         return Player::NONEE;
-
+    //Add if no possible move for white or black then push lose
+    
 }
 
 
@@ -199,7 +243,7 @@ double MiniMax::explore(int depth, Unordered_map board, Player player){
         return hashTable[key];
     //if (key == 137123399843755760L) cout << "RUNNING\n";
     //cout << "RUNNING " << key << endl; 
-    if (depth <= DEPTH && checkEnd(board) == Player::NONEE){
+    if (depth <= DEPTH && checkEnd(board, player) == Player::NONEE){
         double current_point = player == Player::WHITEE ? 13.0 : -13.0;
         //cout << "Inside\n";
         //do stuff;
