@@ -30,12 +30,14 @@ void IOstream::DrawBoard(Unordered_map &board){
     cout<<endl;
 }
 string IOstream::getSymbol(State state){
+    const char *black  = u8"\u25EF";
+    const char *white  = u8"\u25C9";
     if (state == NONE)
         return " ";
     else if (state == BLACK)
-        return "b";
+        return black;
     else if (state == WHITE)
-        return "w";
+        return white;
     else if (state == BLACKKING)
         return "B";
     else if (state == WHITEKING)
