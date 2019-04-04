@@ -2,7 +2,7 @@
 
 Design Checkers game that uses MiniMax and Alpha-Beta pruning.
 
-Created by Nurpeiis Baimukan and Ghadeer Ghosheh
+Created by Nurpeiis Baimukan 
 ## Instructions
 
 First, user should run makefile:
